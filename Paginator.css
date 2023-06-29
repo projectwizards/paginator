@@ -1,0 +1,33 @@
+/* Paginator
+   An extension of vivliostyle-print (https://github.com/vivliostyle/vivliostyle-print)
+   It enables vivliostyle pagination in an embedded WKWebView under iOS and macOS
+   and it provides a description of every HTML element in a paginated layout.
+   This code is released under the GNU Affero General Public License v3.0 (https://www.gnu.org/licenses/agpl-3.0.en.html) */
+
+html, body {
+    /* We don't the page contents to start directly at (0|0) in the top left corner of the web page,
+       so that it's easy to create snapshots from it via the WKWebView APIs. */
+    margin:  0;
+    padding: 0;
+}
+
+[data-vivliostyle-viewer-viewport] {
+    /* We don't want the default gray background of the viewer outside of pages */
+    background: none !important;
+}
+
+[data-vivliostyle-outer-zoom-box] {
+    /* Make sure the viewer positions its content in the top left corner instead of centered */
+    margin: 0 !important;
+}
+
+a[data-adapt-spec] {
+    /* Vivliostyle adds navigation anchor links which can mess up table layouts.
+     To prevent this, we take them out of the layout.*/
+    display: none;
+}
+
+/* See same definition in HTMLPreview.css for description */
+.ads-dimmed {
+    opacity: 0.4;
+}

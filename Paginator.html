@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!--
+ Paginator
+ An extension of vivliostyle-print (https://github.com/vivliostyle/vivliostyle-print)
+ It enables vivliostyle pagination in an embedded WKWebView under iOS and macOS
+ and it provides a description of every HTML element in a paginated layout.
+ This code is released under the GNU Affero General Public License v3.0 (https://www.gnu.org/licenses/agpl-3.0.en.html)
+-->
+<html data-vivliostyle-paginated="true">
+  <head>
+    <meta charset='utf-8'/>
+    <link rel="stylesheet" href="Paginator.css">
+  </head>
+  <body>
+    <div id="pagination-viewport"></div>
+    <script type="module">
+        import { setupPaginator } from './Paginator.js'
+        setupPaginator()
+    </script>
+  </body>
+</html>
