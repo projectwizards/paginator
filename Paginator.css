@@ -5,10 +5,13 @@
    This code is released under the GNU Affero General Public License v3.0 (https://www.gnu.org/licenses/agpl-3.0.en.html) */
 
 html, body {
-    /* We don't the page contents to start directly at (0|0) in the top left corner of the web page,
+    /* We don't want the page contents to start directly at (0|0) in the top left corner of the web page,
        so that it's easy to create snapshots from it via the WKWebView APIs. */
     margin:  0;
     padding: 0;
+    /* Without any definition, Vivliostyle uses 'text-align: justify' as its default
+       To be in sync with the default of HTML we set it to 'left' here. */
+    text-align: left;
 }
 
 [data-vivliostyle-viewer-viewport] {
