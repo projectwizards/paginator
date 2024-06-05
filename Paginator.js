@@ -1,9 +1,9 @@
-// Paginator
+// Paginator - https://github.com/projectwizards/paginator
 // An extension of vivliostyle-print (https://github.com/vivliostyle/vivliostyle-print)
 // It enables vivliostyle pagination in an embedded WKWebView under iOS and macOS
 // and it provides a description of every HTML element in a paginated layout.
 // This code is released under the GNU Affero General Public License v3.0 (https://www.gnu.org/licenses/agpl-3.0.en.html)
- 
+
 import { CoreViewer } from './vivliostyle.es6.js'
 
 export function setupPaginator() {
@@ -13,13 +13,13 @@ export function setupPaginator() {
     var viewer = new CoreViewer( { viewportElement: viewport, window: window, debug: false },
     {
         pageViewMode: "singlePage",
-        zoom: 1
     })
     
-    function loadDocument(url) {
+    function loadDocument(url, zoom) {
+        console.log("load")
         viewer.loadDocument(url, {}, {
             pageViewMode: "singlePage",
-            zoom: 1,
+            zoom: zoom,
             // Prevents auto re-running of layout when the window is resized.
             autoResize: false
         })
@@ -107,7 +107,8 @@ export function setupPaginator() {
     }
     
     function didFinishNavigation(viewer) {
-       window.webkit?.messageHandlers.notifications.postMessage({ "name": "didFinishNavigation" })
+        fixMathJaxBaselines()
+        window.webkit?.messageHandlers.notifications.postMessage({ "name": "didFinishNavigation" })
     }
     
     // As the CoreViewer does not allow querying the current page, we need to do our own bookkeeping.
@@ -116,6 +117,12 @@ export function setupPaginator() {
     function showPage(index) {
         currentPageIndex = index
         viewer.navigateToPage("epage", index)
+    }
+    
+    function fixMathJaxBaselines() {
+        if (typeof window.fixBaselinesOfAllMathJaxSVGs === "function") {
+            window.fixBaselinesOfAllMathJaxSVGs()
+        }
     }
     
     function currentPageContainer() {
@@ -133,7 +140,7 @@ export function setupPaginator() {
     viewer.addListener("readystatechange", () => { didChangeReadyState(viewer) })
     viewer.addListener("nav",              () => { didFinishNavigation(viewer) })
 
-    // The only way to expose functions of a JavaScript module to by called by WKWebView is to attach them to
+    // The only way to expose functions of a JavaScript module to be called by WKWebView is to attach them to
     // the global window object. We do this for the functions we need to call from Swift.
     window.loadDocument = loadDocument
     window.elementsOfCurrentPage = elementsOfCurrentPage
@@ -141,5 +148,5 @@ export function setupPaginator() {
     window.getPageSizes = function() {
         return viewer.getPageSizes()
     }
-
+    window.disableAutomaticMathjaxUpdates = true
 }
